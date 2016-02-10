@@ -60,7 +60,7 @@ router.get('/:year=?/:modetype=?',function(req,res,next){
     mode = "O";
   }
   data=[];
-  Logs("aptLogModel").aggregate([{$match :{year:year,download:{$regex:".deb$"},mode:mode}},{$group:{_id:{filename:"$download"}}}],function(err,result){
+  Logs(req.session.user.organization,"aptLogModel").aggregate([{$match :{year:year,download:{$regex:".deb$"},mode:mode}},{$group:{_id:{filename:"$download"}}}],function(err,result){
 
     for(var i=0;i<result.length;i++){
     tempObj.push(result[i]["_id"]["filename"])

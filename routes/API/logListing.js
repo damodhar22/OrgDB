@@ -17,8 +17,9 @@ This code is written by Prateek Reddy Yammanuru, Shiva Manognya Kandikuppa, Uday
 var Log = require('../../models/dbConfig.js').getModel;
 var express = require('express');
 var router = express.Router();
-
+var exp;
 /*----------Response for All data and particular path data-------------------------------------*/
+
 
 router.get('/:pathId/:pgno', function(req, res) {
   temp = req.params.pathId;
@@ -27,12 +28,12 @@ router.get('/:pathId/:pgno', function(req, res) {
   var counts = 0;
   skip = pgno > 1 ? ((pgno-1) * limit) : 0;
   if(temp == "All") {
-    Log("serverModel").count({}, function(er,c) {
+    Log(req.session.user.organization,"serverModel").count({}, function(er,c) {
       counts=c;
     });
 
 
-    Log("serverModel").find({}, 'remote host path user method code size referer agent time', {skip : skip,limit : limit,sort:{time: -1} }, function(err, serverhits) {
+    Log(req.session.user.organization,"serverModel").find({}, 'remote host path user method code size referer agent time', {skip : skip,limit : limit,sort:{time: -1} }, function(err, serverhits) {
       var obj = {
         "collection_data" : serverhits,
         "count" : counts
@@ -55,10 +56,10 @@ router.get('/:pathId/:pgno', function(req, res) {
       else {
       paths = "/";
       }
-      Log("serverModel").count({path:paths},function(er,c){
+      Log(req.session.user.organization,"serverModel").count({path:paths},function(er,c){
           counts = c;
       });
-      Log("serverModel").find({path : paths},'remote host path user method code size referer agent time',{skip : skip, limit : limit,sort:{time: -1} }, function(err,serverhits) {
+      Log(req.session.user.organization,"serverModel").find({path : paths},'remote host path user method code size referer agent time',{skip : skip, limit : limit,sort:{time: -1} }, function(err,serverhits) {
           var obj = {"collection_data" : serverhits,
                     "count" : counts
                   };
@@ -75,8 +76,8 @@ router.get('/:pathId/:pgno', function(req, res) {
 /*-------------Response for path and count object--------------------------------------------------------*/
 
 router.get('/', function(req, res  ) {
-console.log("llllllllllllllllllllllllllllllllllllllllllllllll"+Log);
-  Log("serverModel").find({}, 'remote host path user method code size referer agent time', function(err, serverhits) {
+
+  Log(req.session.user.organization,"serverModel").find({}, 'remote host path user method code size referer agent time', function(err, serverhits) {
 
 
         var obj = serverhits;

@@ -120,7 +120,7 @@ router.get('/:charttype=?/:urldata=?',function(req,res,next){
         periodName = param[0]+"_"+param[1];
     }
     var queryParams = makeQuery(packageType,periodType,periodName);
-    Logs("aptLogModel").aggregate([
+    Logs(req.session.user.organization,"aptLogModel").aggregate([
       {$match:queryParams[0]},
       {$group:{_id: queryParams[1],count:{$sum:1}}}],
       function(err,result){

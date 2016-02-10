@@ -35,7 +35,7 @@ router.get('/:year/:month', function(req, res, next) {
   var finalData = [];
   var accumulator = {};
   var dates = {};
-  Log("serverModel").find({time : {"$gte": fromDate, "$lt": toDate}}, 'method time', function(err, serverHits) {
+  Log(req.session.user.organization,"serverModel").find({time : {"$gte": fromDate, "$lt": toDate}}, 'method time', function(err, serverHits) {
     for(i in serverHits)
     {
       var obj = {};

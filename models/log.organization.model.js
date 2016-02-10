@@ -13,15 +13,17 @@ var organizationSchema = new Schema(
     services: [
       {
         service:String,
-        dbName:String
+        dbDetails:{
+          host:String,
+          port:String,
+          dbName:String
+        }
       }
     ],
     users:
     [{
       username : {
         type: String,
-        unique: true,
-        required: 'Username is required',
         trim: true
       },
       password : {

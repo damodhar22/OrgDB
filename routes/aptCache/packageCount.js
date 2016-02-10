@@ -21,7 +21,7 @@ router.get('/year/year_month/:year_month=?', function(req, res, next) {
     matchObj['month']=monthValue;
   }
 
-  Logs("aptLogModel").aggregate([
+  Logs(req.session.user.organization,"aptLogModel").aggregate([
     { $match : matchObj},
     { $group:{_id:{package:"$download"},count:{$sum:1}}}],
     function(err,doc){

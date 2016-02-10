@@ -56,7 +56,7 @@ router.get('/package/:packinfo=?/:period=?',function(req,res,next){
     var period = req.params.period;
     if(packinfo === "package_bz2_info"){
         var matchParam = makeQuery(period);
-        Logs("aptLogModel").aggregate([{$match:matchParam},{$group:{_id: {"download":"$download"},count:{$sum:1}}}],function(err,result){
+        Logs(req.session.user.organization,"aptLogModel").aggregate([{$match:matchParam},{$group:{_id: {"download":"$download"},count:{$sum:1}}}],function(err,result){
             jsonData = createData(result);
             res.json(jsonData);
         });

@@ -77,7 +77,7 @@ module.exports = function(passport){
 							console.log('Organization of User Not Found with'+user.organization);
 							return done(null , false);
 						}
-						setDbConnection(organization.services);
+						//setDbConnection(organization.services);
 						return done(null , user);
 					})
 				}

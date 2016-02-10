@@ -11,44 +11,58 @@ var configSchema = require('./log.config.model');
 var aptLogSchema = require('./logSchema');
 var aptConfigSchema = require('./configSchema');
 var organizationSchema=require('./log.organization.model');
-
-var db1,db2,db3,serverModel ,aptLogModel ,aptConfigModel;
+var organizationModel = masterDB.model('Organization',organizationSchema);
+org(organizationModel);
+var models={};
+var db1,db2,db3;
 
 function setDbConnection(services){
   for (var i = 0; i < services.length; i++) {
-    console.log("db loaded"+services[i].dbName);
+    var dbDetails=services[i].dbDetails;
     if(services[i].service=="nginx"){
-      db1 = mongoose.createConnection("mongodb://localhost/"+services[i].dbName);
+      db1 = mongoose.createConnection("mongodb://"+dbDetails.host+":"+dbDetails.port+"/"+dbDetails.dbName);
     }
     else if(services[i].service=="appgit"){
-      db2 = mongoose.createConnection("mongodb://localhost/"+services[i].dbName);
+      db2 = mongoose.createConnection("mongodb://"+dbDetails.host+":"+dbDetails.port+"/"+dbDetails.dbName);
     }
     else if (services[i].service=="git") {
-      db3 = mongoose.createConnection("mongodb://localhost/"+services[i].dbName);
+      db3 = mongoose.createConnection("mongodb://"+dbDetails.host+":"+dbDetails.port+"/"+dbDetails.dbName);
     }
   }
-  serverModel = db1.model('Logs',serverSchema),
-  aptLogModel = db2.model('aptLog',aptLogSchema),
-  aptConfigModel = db2.model('aptConfig', aptConfigSchema)
-
+  var dbModels=
+  {
+    serverModel : db1.model('Logs',serverSchema),
+    aptLogModel : db2.model('aptLog',aptLogSchema),
+    aptConfigModel : db2.model('aptConfig', aptConfigSchema)
+  };
+  return dbModels;
 }
 module.exports = {
   userModel : masterDB.model('User',userSchema),
   configModel : masterDB.model('Config',configSchema),
-  organizationModel : masterDB.model('Organization',organizationSchema),
-  setDbConnection : setDbConnection,
+  organizationModel : organizationModel,
   getModel:getModel
 };
 
-function getModel(model){
-  if(model=="serverModel"){
-    return serverModel;
-  }
-  else if(model=="aptLogModel"){
-    return aptLogModel;
-  }
-  else if(model=="aptConfigModel"){
-    return aptConfigModel;
-  }
+function org(organizationModel){
+  organizationModel.find({}, 'organizationName services', function (err, docs) {
+    console.log(docs.organizationName+"-------------");
+    for(var i=0;i<docs.length;i++){
+  models[docs[i].organizationName]=setDbConnection(docs[i].services);
+}
+console.log(models);
+});
+}
 
+function getModel(organization,model){
+  if(models[organization][model]==undefined){
+    organizationModel.find({}, 'organizationName services', function (err, docs){
+    models[docs.organizationName]=setDbConnection(docs.services);
+    return models[organization][model];
+  });
+
+  }
+  else{
+    return models[organization][model];
+  }
 }

@@ -25,6 +25,8 @@ console.log("in authenticate");
 
 	router.get('/success', function(req, res){
 		console.log("called auth success");
+		console.log(req.user);
+		req.session.user=req.user;
 		res.send({state: 'success', user: req.user ? req.user : null});
 	});
 
