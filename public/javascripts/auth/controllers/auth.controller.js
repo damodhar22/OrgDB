@@ -73,19 +73,12 @@ function($scope,$cookies, $http, $rootScope, $location) {
   };
 
   $scope.register = function(){
-    $scope.userDetails={
-      firstName:$scope.firstName,
-      lastName:$scope.lastName,
-      username:$scope.username,
-      email:$scope.email,
-      password:$scope.password
-    };
 
-    if (!$scope.firstName || !$scope.lastName || !$scope.username || !$scope.email || !$scope.password || !$scope.confirmPassword){
+
+    if (!$scope.firstName || !$scope.lastName || !$scope.username || !$scope.email || !$scope.password || !$scope.confirmPassword || !$scope.organization){
 
       $scope.checkData = "*Please fill all the fields";
     }
-
 
     if ($scope.password && (""+$scope.password.length)<6){
       $scope.checkData = "Password should be of minimum 6 characters";
@@ -103,6 +96,16 @@ function($scope,$cookies, $http, $rootScope, $location) {
 
     if(check==true) {
       if ($scope.password && $scope.confirmPassword && $scope.password==$scope.confirmPassword){
+
+        $scope.userDetails={
+          firstName:$scope.firstName,
+          lastName:$scope.lastName,
+          username:$scope.username,
+          email:$scope.email,
+          password:$scope.password,
+          organization:$scope.organization
+        };
+
         $http.post('/auth/signup', $scope.userDetails).success(function(data){
           if(data.state == 'success'){
             $rootScope.authenticated = true;

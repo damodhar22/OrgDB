@@ -17,6 +17,8 @@ This code is written by Prateek Reddy Yammanuru, Shiva Manognya Kandikuppa, Uday
 var mongoose = require('mongoose');
 //var User = require('mongoose').model('User');
 var User = require('./models/dbConfig.js').userModel;
+var setDbConnection = require('./models/dbConfig.js').setDbConnection;
+var organization = require('./models/dbConfig.js').organizationModel;
 var LocalStrategy   = require('passport-local').Strategy;
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 //var bCrypt = require('bcrypt-nodejs');
@@ -65,7 +67,19 @@ module.exports = function(passport){
 					}
 					// User and password both match, return user from done method
 					// which will be treated like success
-					return done(null, user);
+					organization.findOne({ 'organizationName' :  user.organization }, function(err, organization){
+						// In case of any error, return using the done method
+						if (err){
+							console.log('Error in SignIn: '+err);
+							return done(null , false);
+						}
+						if (!organization){
+							console.log('Organization of User Not Found with'+user.organization);
+							return done(null , false);
+						}
+						setDbConnection(organization.services);
+						return done(null , user);
+					})
 				}
 			);
 		}
@@ -102,6 +116,7 @@ module.exports = function(passport){
 					newUser.email=req.body.email;
 					newUser.firstName=req.body.firstName;
 					newUser.lastName=req.body.lastName;
+					newUser.organization=req.body.organization;
 
 					// save the user
 					newUser.save(function(err) {
@@ -110,7 +125,7 @@ module.exports = function(passport){
 							throw err;
 						}
 						console.log(newUser.username + ' Registration succesful');
-						return done(null, newUser);
+						return done(null, newUser);;
 					});
 				}
 			});
@@ -130,6 +145,11 @@ module.exports = function(passport){
 		}
 
 
+	};
+
+	var connectToDB = function(user){
+
+		console.log("ggggggggggggggggggggggggg");
 	};
 
 	passport.use('google',new GoogleStrategy({
@@ -180,17 +200,4 @@ module.exports = function(passport){
 			});
 
 	}));
-//
-// var createHash = function(password) {
-// 	  return this.password === this.hashPassword(password);
-// 	};
-
-	// var isValidPassword = function(user, password){
-	// 	return bCrypt.compareSync(password, user.password);
-	// };
-	// // Generates hash using bCrypt
-	// var createHash = function(password){
-	// 	return bCrypt.hashSync(password, bCrypt.genSaltSync(10), null);
-	// };
-
 };

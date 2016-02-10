@@ -19,6 +19,7 @@ angular.module('logAggregator').controller('mainController', ['$scope','$cookies
       //  angular.element('.homepage').css('display','block');
       loadConfig.getdata( function(data) {
         $scope.config = data;
+        console.log("----------------------------------------------------");
         $window.config = $scope.config;
       });
 

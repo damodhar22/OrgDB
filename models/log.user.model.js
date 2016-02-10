@@ -59,6 +59,11 @@ var LogUserSchema = new Schema({
   // },
   // providerId: String,
   // providerData: {},
+  organization : {
+    type: String,
+    required: 'Organization is required',
+    trim: true
+  },
   created: {
     type: Date,
     default: Date.now

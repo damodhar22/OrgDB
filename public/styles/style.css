@@ -620,7 +620,7 @@ serverdown{
   text-indent: 14px;
 }
 
-.left-inner-addon .fa-user,.fa-lock,.fa-envelope,.fa-key {
+.left-inner-addon .fa-user,.fa-lock,.fa-envelope,.fa-key,.fa-institution {
   color: #979faf;
   position: absolute;
   font-size: 20px;

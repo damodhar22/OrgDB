@@ -17,7 +17,7 @@ This code is written by Prateek Reddy Yammanuru, Shiva Manognya Kandikuppa, Uday
 var express = require('express');
 var path = require('path');
 var router = express.Router();
-var Log = require('../../models/dbConfig.js').serverModel;
+var Log = require('../../models/dbConfig.js').getModel;
 
 /* GET home page. */
 router.get('/:year/:month', function(req, res, next) {
@@ -35,7 +35,7 @@ router.get('/:year/:month', function(req, res, next) {
   var finalData = [];
   var accumulator = {};
   var dates = {};
-  Log.find({time : {"$gte": fromDate, "$lt": toDate}}, 'method time', function(err, serverHits) {
+  Log("serverModel").find({time : {"$gte": fromDate, "$lt": toDate}}, 'method time', function(err, serverHits) {
     for(i in serverHits)
     {
       var obj = {};

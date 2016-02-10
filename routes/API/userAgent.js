@@ -14,7 +14,7 @@ limitations under the License.
 
 This code is written by Prateek Reddy Yammanuru, Shiva Manognya Kandikuppa, Uday Kumar Mydam, Nirup TNL, Sandeep Reddy G, Deepak Kumar*/
 
-var Log = require('../../models/dbConfig.js').serverModel;
+var Log = require('../../models/dbConfig.js').getModel;
 var express = require('express');
 var router = express.Router();
 
@@ -32,7 +32,7 @@ router.get('/:showBy/:year/:month', function(req, res, next) {
     fromDate = new Date(year, parseInt(month)-1);
     toDate = new Date(year, parseInt(month));
   }
-  Log.find({time : {"$gte": fromDate, "$lt": toDate}}, 'agent', function(err, serverHits) {
+  Log("serverModel").find({time : {"$gte": fromDate, "$lt": toDate}}, 'agent', function(err, serverHits) {
     var reqData = [];
     var getFilter = function (agent) {
       for(var i = 0, len = config.userAgentFilters[showBy].length; i < len; i++) {

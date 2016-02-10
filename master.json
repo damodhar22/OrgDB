@@ -1,0 +1,27 @@
+{
+  "organizationName": "gitF1",
+  "organizationId": "111",
+  "services": [
+  {
+    "service":"git",
+    "dbName":"gitDB",
+    "gitRepositories":[]
+  },
+  {
+    "service":"nginx",
+    "dbName":"nginx"
+  },
+  {
+    "service":"appgit",
+    "dbName":"LogAggregate"
+    }],
+    "users":
+    [{
+      "userName":"User1",
+      "password":"User1"
+    },
+    {
+      "userName":"User2",
+      "password":"User2"
+      }]
+    }

@@ -10,7 +10,7 @@ MongoClient.connect('mongodb://172.23.238.253:27018/LogAggregate', function (err
   if (err) {
     throw err;
   } else {
-    console.log("successfully connected to the database");
+    console.log("successfully connected to the database----------------------------------------------");
   }
 
   var collection = db.collection('Dashboard');

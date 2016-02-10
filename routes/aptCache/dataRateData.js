@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 //var Logs = require('../../model/logSchema');
-var Logs = require('../../models/dbConfig').aptLogModel;
+var Logs = require('../../models/dbConfig').getModel;
 
 router.get('/size/:packagetype=?/:year=?/:datename=?',function(req,res,next){
   var year = parseInt(req.params.year);
@@ -93,7 +93,7 @@ router.get('/size/:packagetype=?/:year=?/:datename=?',function(req,res,next){
    }
  }
 
-  Logs.aggregate([{$match:match},{$group:{_id: {"period":period,"Type":"$mode"},size:{$sum:"$size"}}}],function(err,result){
+  Logs("aptLogModel").aggregate([{$match:match},{$group:{_id: {"period":period,"Type":"$mode"},size:{$sum:"$size"}}}],function(err,result){
 
     if(sp[0]==="monthwise"){
       yearly(result);

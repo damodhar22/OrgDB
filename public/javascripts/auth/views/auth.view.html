@@ -71,8 +71,12 @@ This code is written by Prateek Reddy Yammanuru, Shiva Manognya Kandikuppa, Uday
         <div class="left-inner-addon ">
           <span class="fa fa-key"></span>
           <input type="password" ng-model="confirmPassword"placeholder="Confirm Password" class="form-control" required />
-
          </div>
+         <div class="left-inner-addon ">
+           <span class="fa fa-institution"></span>
+           <input type="text" ng-model="organization"placeholder="Organization" class="form-control" required />
+
+          </div>
           <a ng-click='register()' class="btn btn-success btn-lg active sign-button" id="create" role="button">Create Account</a>
            <center><h4 class="error">{{checkData}}</h4></center>
 
